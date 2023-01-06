@@ -1,0 +1,36 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: clm
+  mvc:
+    servlet:
+      load-on-startup: 1
+      path: /api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/clm
+    username: root
+    password: root
+  cache:
+    redis:
+      key-prefix: '${spring.application.name}:'
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      table-prefix: '${spring.application.name}_'
+  type-aliases-package: icu.agony.clm.entity
+
+sa-token:
+  is-print: false
+  is-log: true
+  is-read-cookie: false
+  is-write-header: true
+  token-name: '${spring.application.name}-token'
+
+logging:
+  level:
+    icu.agony.clm: debug
