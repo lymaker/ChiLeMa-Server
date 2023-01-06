@@ -18,4 +18,12 @@ public interface UserService {
      */
     void updateAvatar(MultipartFile file);
 
+    /**
+     * 更新用户字段
+     *
+     * @param field 用户字段
+     * @param value 用户昵称
+     */
+    void updateField(String field, String value);
+
 }

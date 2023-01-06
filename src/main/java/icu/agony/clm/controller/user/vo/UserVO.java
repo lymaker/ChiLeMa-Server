@@ -1,14 +1,14 @@
 package icu.agony.clm.controller.user.vo;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@ToString
 public class UserVO {
 
     private String id;

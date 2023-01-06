@@ -3,7 +3,6 @@ package icu.agony.clm.exception.handler;
 import cn.dev33.satoken.exception.NotLoginException;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.BasicClmException;
-import icu.agony.clm.exception.InternalServerException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -29,12 +28,14 @@ public class GlobalExceptionHandler {
         return e.responseEntity();
     }
 
-    @ExceptionHandler(NotLoginException.class)
-    ResponseEntity<?> notLoginExceptionHandler() {
+    @ExceptionHandler
+    ResponseEntity<?> notLoginExceptionHandler(NotLoginException e) {
         if (isDebug) {
             log.debug("用户未登录");
         }
-        return ResponseEntity.badRequest().build();
+        BadRequestException badRequestException = new BadRequestException("用户未登录", e);
+        badRequestException.message("用户未登录");
+        return badRequestException.responseEntity();
     }
 
     @ExceptionHandler
