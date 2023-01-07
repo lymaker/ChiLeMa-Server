@@ -26,6 +26,8 @@ public class UserEntity {
 
     private String avatarImageUrl;
 
+    private Double money;
+
     private Date registerTime;
 
 }

@@ -23,6 +23,8 @@ public class UserInfoVO {
 
     private String avatarImageUrl;
 
+    private Double money;
+
     private Date registerTime;
 
 }

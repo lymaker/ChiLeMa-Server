@@ -45,6 +45,7 @@ public class AuthServiceImpl implements AuthService {
         if (isDebug) {
             log.debug("用户登录参数：{}", param);
         }
+        // 待办：后续可能会优化成从缓存读取
         UserEntity userEntity = new LambdaQueryChainWrapper<>(userMapper)
             .eq(UserEntity::getUsername, param.getUsername())
             .eq(UserEntity::getPassword, SaSecureUtil.aesEncrypt(authProperties.getAesKey(), param.getPassword()))

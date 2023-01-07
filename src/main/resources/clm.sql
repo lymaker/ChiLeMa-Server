@@ -13,6 +13,7 @@ CREATE TABLE clm_user
     email            VARCHAR(50)        NOT NULL COMMENT '邮箱',
     phone            VARCHAR(11)        NOT NULL COMMENT '手机号',
     avatar_image_url VARCHAR(255)       NOT NULL COMMENT '用户头像',
+    money            DOUBLE    DEFAULT 0 COMMENT '余额',
     register_time    TIMESTAMP DEFAULT NOW() COMMENT '用户注册时间'
 ) COMMENT '用户表';
 
@@ -65,6 +66,22 @@ CREATE TABLE clm_store
     close_time           TIMESTAMP    NOT NULL COMMENT '停止营业时间',
     CONSTRAINT clm_store_clm_user_boss_id FOREIGN KEY (boss_id) REFERENCES clm_user (id)
 ) COMMENT '店铺表';
+
+CREATE TABLE clm_store_category
+(
+    id              VARCHAR(50) PRIMARY KEY COMMENT 'id',
+    cover_image_url VARCHAR(255) NOT NULL COMMENT '封面',
+    title           VARCHAR(10)  NOT NULL COMMENT '标题',
+    is_sub          BOOLEAN DEFAULT FALSE COMMENT '是否为子分类'
+) COMMENT '店铺分类';
+
+CREATE TABLE clm_store_category_connect
+(
+    store_id    VARCHAR(50) NOT NULL COMMENT '店铺id',
+    category_id VARCHAR(50) NOT NULL COMMENT '分类id',
+    CONSTRAINT clm_store_category_connect_clm_store_store_id FOREIGN KEY (store_id) REFERENCES clm_store (id),
+    CONSTRAINT clm_store_category_connect_clm_store_category_category_id FOREIGN KEY (category_id) REFERENCES clm_store_category (id)
+) COMMENT '店铺分类中间表';
 
 CREATE TABLE clm_store_commodity
 (
@@ -190,5 +207,7 @@ CREATE TABLE clm_comment_image
 ) COMMENT '评论图片表';
 
 -- 数据
-INSERT INTO clm_role VALUES (1, 'consumer');
-INSERT INTO clm_role VALUES (2, 'provider');
+INSERT INTO clm_role
+VALUES (1, 'consumer');
+INSERT INTO clm_role
+VALUES (2, 'provider');
