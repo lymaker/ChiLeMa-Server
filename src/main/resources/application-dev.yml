@@ -30,6 +30,7 @@ sa-token:
   is-read-cookie: false
   is-write-header: true
   token-name: '${spring.application.name}-token'
+  timeout: -1
 
 logging:
   level:

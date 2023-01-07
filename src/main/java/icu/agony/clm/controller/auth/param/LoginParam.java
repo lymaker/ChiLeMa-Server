@@ -6,15 +6,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @Setter
 @ToString
 public class LoginParam {
 
     @UsernameVerify
+    @NotBlank
     private String username;
 
     @PasswordVerify
+    @NotBlank
     private String password;
 
     private Boolean isStore = false;

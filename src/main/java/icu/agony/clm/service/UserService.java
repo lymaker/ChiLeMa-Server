@@ -1,6 +1,6 @@
 package icu.agony.clm.service;
 
-import org.springframework.web.multipart.MultipartFile;
+import icu.agony.clm.controller.user.param.UserUpdateParam;
 
 public interface UserService {
 
@@ -12,18 +12,10 @@ public interface UserService {
     void checkUsername(String username);
 
     /**
-     * 更新用户头像
-     *
-     * @param file 头像文件
-     */
-    void updateAvatar(MultipartFile file);
-
-    /**
      * 更新用户字段
      *
-     * @param field 用户字段
-     * @param value 用户昵称
+     * @param param 请求参数
      */
-    void updateField(String field, String value);
+    void updateField(UserUpdateParam param);
 
 }

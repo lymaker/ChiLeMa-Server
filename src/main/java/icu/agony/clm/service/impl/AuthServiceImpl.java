@@ -8,7 +8,7 @@ import icu.agony.clm.config.properties.ClmDefaultProperties;
 import icu.agony.clm.consts.Role;
 import icu.agony.clm.controller.auth.param.LoginParam;
 import icu.agony.clm.controller.auth.param.RegisterParam;
-import icu.agony.clm.controller.user.vo.UserVO;
+import icu.agony.clm.controller.auth.vo.UserInfoVO;
 import icu.agony.clm.entity.UserEntity;
 import icu.agony.clm.entity.UserRoleEntity;
 import icu.agony.clm.exception.BadRequestException;
@@ -89,9 +89,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Cacheable(cacheNames = "user", key = "T(cn.dev33.satoken.stp.StpUtil).getLoginIdAsString()")
-    public UserVO userInfo() {
+    public UserInfoVO userInfo() {
         String userId = StpUtil.getLoginIdAsString();
-        return modelMapper.map(userMapper.selectById(userId), UserVO.class);
+        return modelMapper.map(userMapper.selectById(userId), UserInfoVO.class);
     }
 
 }

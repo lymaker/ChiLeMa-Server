@@ -2,7 +2,7 @@ package icu.agony.clm.service;
 
 import icu.agony.clm.controller.auth.param.LoginParam;
 import icu.agony.clm.controller.auth.param.RegisterParam;
-import icu.agony.clm.controller.user.vo.UserVO;
+import icu.agony.clm.controller.auth.vo.UserInfoVO;
 
 public interface AuthService {
 
@@ -35,6 +35,6 @@ public interface AuthService {
      *
      * @return 返回给前端的数据
      */
-    UserVO userInfo();
+    UserInfoVO userInfo();
 
 }

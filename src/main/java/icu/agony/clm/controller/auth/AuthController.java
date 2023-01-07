@@ -3,7 +3,7 @@ package icu.agony.clm.controller.auth;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import icu.agony.clm.controller.auth.param.LoginParam;
 import icu.agony.clm.controller.auth.param.RegisterParam;
-import icu.agony.clm.controller.user.vo.UserVO;
+import icu.agony.clm.controller.auth.vo.UserInfoVO;
 import icu.agony.clm.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +39,7 @@ public class AuthController {
 
     @GetMapping("/user-info")
     @SaCheckLogin
-    UserVO userInfo() {
+    UserInfoVO userInfo() {
         return authService.userInfo();
     }
 
