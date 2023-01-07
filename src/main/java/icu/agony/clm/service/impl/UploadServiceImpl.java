@@ -44,7 +44,6 @@ public class UploadServiceImpl implements UploadService {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentLength(inputStream.available());
             objectMetadata.setContentType(param.getContentType());
-            System.out.println();
             cosClient.putObject(bucketName, bucketKey, inputStream, objectMetadata);
             URL imageUrl = cosClient.getObjectUrl(bucketName, bucketKey);
             ObjectNode json = objectMapper.createObjectNode();

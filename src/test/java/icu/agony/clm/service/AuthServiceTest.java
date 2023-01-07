@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 @SpringBootTest(classes = Application.class)
 @Slf4j
-public class AuthMapperTest {
+public class AuthServiceTest {
 
     @Resource
     private AuthService authService;
