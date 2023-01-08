@@ -3,7 +3,7 @@ package icu.agony.clm.service;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import icu.agony.clm.Application;
 import icu.agony.clm.config.properties.ClmAuthProperties;
-import icu.agony.clm.controller.auth.param.RegisterParam;
+import icu.agony.clm.controller.user.param.UserCreateParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,29 +14,29 @@ import javax.annotation.Resource;
 
 @SpringBootTest(classes = Application.class)
 @Slf4j
-public class AuthServiceTest {
+public class UserServiceTest {
 
     @Resource
-    private AuthService authService;
+    private UserService userService;
 
     @Resource
-    private ClmAuthProperties authProperties;
+    private ClmAuthProperties clmAuthProperties;
 
     @Test
     void insertDefaultUser() {
-        RegisterParam param = new RegisterParam();
+        UserCreateParam param = new UserCreateParam();
         param.setNickname("Anna");
         param.setUsername("1265894132");
         param.setPassword("a12345678");
         param.setPhone("12312312312");
         param.setEmail("1265894132@qq.com");
-        authService.register(param);
+        userService.create(param);
     }
 
     @ParameterizedTest
     @ValueSource(strings = "a12345678")
     void generateEncryptPassword(String password) {
-        String text = SaSecureUtil.aesEncrypt(authProperties.getAesKey(), password);
+        String text = SaSecureUtil.aesEncrypt(clmAuthProperties.getAesKey(), password);
         log.debug("加密后的密码: {}", text);
     }
 

@@ -2,8 +2,6 @@ package icu.agony.clm.controller.auth;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import icu.agony.clm.controller.auth.param.LoginParam;
-import icu.agony.clm.controller.auth.param.RegisterParam;
-import icu.agony.clm.controller.auth.vo.UserInfoVO;
 import icu.agony.clm.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -21,11 +19,6 @@ public class AuthController {
         authService.login(param);
     }
 
-    @PostMapping("/register")
-    void register(@RequestBody @Validated RegisterParam param) {
-        authService.register(param);
-    }
-
     @DeleteMapping("/logout")
     @SaCheckLogin
     void logout() {
@@ -35,12 +28,6 @@ public class AuthController {
     @GetMapping("/check")
     void check() {
         authService.check();
-    }
-
-    @GetMapping("/user-info")
-    @SaCheckLogin
-    UserInfoVO userInfo() {
-        return authService.userInfo();
     }
 
 }

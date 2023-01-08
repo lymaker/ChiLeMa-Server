@@ -1,4 +1,4 @@
-package icu.agony.clm.controller.auth.param;
+package icu.agony.clm.controller.user.param;
 
 import icu.agony.clm.verify.user.NicknameVerify;
 import icu.agony.clm.verify.user.PasswordVerify;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
-public class RegisterParam {
+public class UserCreateParam {
 
     @NicknameVerify
     @NotBlank

@@ -1,18 +1,17 @@
 package icu.agony.clm.consts;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
-public enum Role {
+public final class Role {
 
-    CONSUMER(1, "consumer"),
+    private Role() {
+    }
 
-    PROVIDER(2, "provider"), ;
+    public static final Integer CONSUMER_ID = 1;
 
-    private final Integer id;
+    public static final String CONSUMER_NAME = "consumer";
 
-    private final String nickname;
+    public static final Integer PROVIDER_ID = 2;
+
+    public static final String PROVIDER_NAME = "provider";
 
 }

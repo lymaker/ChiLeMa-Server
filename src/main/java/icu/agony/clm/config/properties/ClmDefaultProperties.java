@@ -21,6 +21,6 @@ public class ClmDefaultProperties {
      */
     @NotBlank
     @URL
-    private String avatarImageUrl = "https://clm-1300725964.cos.ap-guangzhou.myqcloud.com/avatar/default.png";
+    private String avatarImageUrl = "https://default-1300725964.cos.ap-guangzhou.myqcloud.com/avatar.png";
 
 }

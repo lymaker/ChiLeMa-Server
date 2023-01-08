@@ -1,8 +1,6 @@
 package icu.agony.clm.service;
 
 import icu.agony.clm.controller.auth.param.LoginParam;
-import icu.agony.clm.controller.auth.param.RegisterParam;
-import icu.agony.clm.controller.auth.vo.UserInfoVO;
 
 public interface AuthService {
 
@@ -14,13 +12,6 @@ public interface AuthService {
     void login(LoginParam param);
 
     /**
-     * 用户注册
-     *
-     * @param param 注册参数
-     */
-    void register(RegisterParam param);
-
-    /**
      * 退出登录
      */
     void logout();
@@ -29,12 +20,5 @@ public interface AuthService {
      * 登录检查
      */
     void check();
-
-    /**
-     * 登录用户信息
-     *
-     * @return 返回给前端的数据
-     */
-    UserInfoVO userInfo();
 
 }

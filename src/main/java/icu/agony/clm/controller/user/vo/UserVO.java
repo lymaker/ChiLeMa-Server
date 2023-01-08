@@ -1,4 +1,4 @@
-package icu.agony.clm.controller.auth.vo;
+package icu.agony.clm.controller.user.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class UserInfoVO {
+public class UserVO {
 
     private String id;
 

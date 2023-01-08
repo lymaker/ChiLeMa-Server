@@ -18,13 +18,13 @@ import org.springframework.context.annotation.Bean;
 public class TencentConfiguration {
 
     @Bean
-    COSCredentials cosCredentials(ClmTencentProperties clmTencentProperties) {
-        return new BasicCOSCredentials(clmTencentProperties.getAccessKey(), clmTencentProperties.getSecretKey());
+    COSCredentials cosCredentials(ClmTencentProperties tencentProperties) {
+        return new BasicCOSCredentials(tencentProperties.getAccessKey(), tencentProperties.getSecretKey());
     }
 
     @Bean
-    ClientConfig cosClientConfig(ClmTencentCosProperties clmTencentCosProperties) {
-        Region region = new Region(clmTencentCosProperties.getRegion());
+    ClientConfig cosClientConfig(ClmTencentCosProperties cosProperties) {
+        Region region = new Region(cosProperties.getRegion());
         return new ClientConfig(region);
     }
 
