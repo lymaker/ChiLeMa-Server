@@ -34,9 +34,9 @@ public class UserServiceImpl implements UserService {
 
     private final boolean isDebug = log.isDebugEnabled();
 
-    private final ClmAuthProperties clmAuthProperties;
+    private final ClmAuthProperties authProperties;
 
-    private final ClmDefaultProperties clmDefaultProperties;
+    private final ClmDefaultProperties defaultProperties;
 
     private final UserMapper userMapper;
 
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @CacheEvict(key = "target.cacheKey()")
-    public void updateField(UserUpdateParam param) {
+    public void update(UserUpdateParam param) {
         try {
             // 过滤无效JSON
             if (ObjectUtil.isEmpty(param)) {
@@ -96,9 +96,9 @@ public class UserServiceImpl implements UserService {
         }
         try {
             UserEntity userEntity = modelMapper.map(param, UserEntity.class);
-            String encryptPassword = SaSecureUtil.aesEncrypt(clmAuthProperties.getAesKey(), userEntity.getPassword());
+            String encryptPassword = SaSecureUtil.aesEncrypt(authProperties.getAesKey(), userEntity.getPassword());
             userEntity.setPassword(encryptPassword);
-            userEntity.setAvatarImageUrl(clmDefaultProperties.getAvatarImageUrl());
+            userEntity.setAvatarImageUrl(defaultProperties.getAvatarImageUrl());
             userMapper.insert(userEntity);
             userRoleMapper.insert(new UserRoleEntity(userEntity.getId(), Role.CONSUMER_ID));
         } catch (Exception e) {

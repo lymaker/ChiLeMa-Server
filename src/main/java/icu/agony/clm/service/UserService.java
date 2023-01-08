@@ -18,7 +18,7 @@ public interface UserService {
      *
      * @param param 请求参数
      */
-    void updateField(UserUpdateParam param);
+    void update(UserUpdateParam param);
 
     /**
      * 查询当前登录用户

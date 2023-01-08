@@ -32,7 +32,7 @@ public class UserController {
     @PutMapping("/update")
     @SaCheckLogin
     void update(@RequestBody @Validated UserUpdateParam param) {
-        userService.updateField(param);
+        userService.update(param);
     }
 
     @GetMapping("/select")

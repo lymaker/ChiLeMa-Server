@@ -20,7 +20,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Resource
-    private ClmAuthProperties clmAuthProperties;
+    private ClmAuthProperties authProperties;
 
     @Test
     void insertDefaultUser() {
@@ -36,7 +36,7 @@ public class UserServiceTest {
     @ParameterizedTest
     @ValueSource(strings = "a12345678")
     void generateEncryptPassword(String password) {
-        String text = SaSecureUtil.aesEncrypt(clmAuthProperties.getAesKey(), password);
+        String text = SaSecureUtil.aesEncrypt(authProperties.getAesKey(), password);
         log.debug("加密后的密码: {}", text);
     }
 
