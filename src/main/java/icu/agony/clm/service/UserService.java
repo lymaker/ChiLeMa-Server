@@ -1,6 +1,7 @@
 package icu.agony.clm.service;
 
 import icu.agony.clm.controller.user.param.UserCreateParam;
+import icu.agony.clm.controller.user.param.UserSelectParam;
 import icu.agony.clm.controller.user.param.UserUpdateParam;
 import icu.agony.clm.entity.UserEntity;
 
@@ -34,6 +35,14 @@ public interface UserService {
      * @return 用户实体
      */
     UserEntity selectById(String id);
+
+    /**
+     * 根据 example 查询用户
+     *
+     * @param param 查询参数
+     * @return 用户实体
+     */
+    UserEntity selectByExample(UserSelectParam param);
 
     /**
      * 创建用户

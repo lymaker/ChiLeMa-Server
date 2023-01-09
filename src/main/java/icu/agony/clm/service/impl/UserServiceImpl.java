@@ -8,13 +8,13 @@ import icu.agony.clm.config.properties.ClmAuthProperties;
 import icu.agony.clm.config.properties.ClmDefaultProperties;
 import icu.agony.clm.consts.Role;
 import icu.agony.clm.controller.user.param.UserCreateParam;
+import icu.agony.clm.controller.user.param.UserSelectParam;
 import icu.agony.clm.controller.user.param.UserUpdateParam;
 import icu.agony.clm.entity.UserEntity;
-import icu.agony.clm.entity.UserRoleEntity;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.InternalServerException;
 import icu.agony.clm.mapper.UserMapper;
-import icu.agony.clm.mapper.UserRoleMapper;
+import icu.agony.clm.service.UserRoleService;
 import icu.agony.clm.service.UserService;
 import icu.agony.clm.util.ObjectUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +25,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 @Service
 @CacheConfig(cacheNames = "user")
@@ -40,9 +43,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
-    private final UserRoleMapper userRoleMapper;
-
     private final ModelMapper modelMapper;
+
+    private final UserRoleService userRoleService;
 
     @Override
     public void checkUsername(String username) {
@@ -80,12 +83,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(key = "target.cacheKey()")
+    @Cacheable(key = "#id")
     public UserEntity selectById(String id) {
         return new LambdaQueryChainWrapper<>(userMapper)
             .eq(UserEntity::getId, id)
             .oneOpt()
             .orElseThrow(() -> new BadRequestException("数据库中不存在与此相同的id"));
+    }
+
+    @Override
+    public UserEntity selectByExample(UserSelectParam param) {
+        return new LambdaQueryChainWrapper<>(userMapper)
+            .eq(StringUtils.hasText(param.getId()), UserEntity::getId, param.getId())
+            .eq(StringUtils.hasText(param.getNickname()), UserEntity::getNickname, param.getNickname())
+            .eq(StringUtils.hasText(param.getUsername()), UserEntity::getUsername, param.getUsername())
+            .eq(StringUtils.hasText(param.getPassword()), UserEntity::getPassword, param.getPassword())
+            .eq(StringUtils.hasText(param.getPhone()), UserEntity::getPhone, param.getPhone())
+            .eq(StringUtils.hasText(param.getEmail()), UserEntity::getEmail, param.getEmail())
+            .eq(Objects.nonNull(param.getMoney()), UserEntity::getMoney, param.getMoney())
+            .oneOpt()
+            .orElseThrow(() -> {
+                BadRequestException badRequestException = new BadRequestException("未找到匹配的用户");
+                badRequestException.message("用户不存在");
+                return badRequestException;
+            });
     }
 
     @Override
@@ -100,7 +121,7 @@ public class UserServiceImpl implements UserService {
             userEntity.setPassword(encryptPassword);
             userEntity.setAvatarImageUrl(defaultProperties.getAvatarImageUrl());
             userMapper.insert(userEntity);
-            userRoleMapper.insert(new UserRoleEntity(userEntity.getId(), Role.CONSUMER_ID));
+            userRoleService.create(userEntity.getId(), Role.CONSUMER_ID);
         } catch (Exception e) {
             InternalServerException internalServerException = new InternalServerException("注册失败", e);
             internalServerException.message("用户注册失败");

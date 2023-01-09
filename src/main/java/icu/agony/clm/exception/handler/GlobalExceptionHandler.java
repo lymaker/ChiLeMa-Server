@@ -1,6 +1,7 @@
 package icu.agony.clm.exception.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotRoleException;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.BasicClmException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,16 @@ public class GlobalExceptionHandler {
         }
         BadRequestException badRequestException = new BadRequestException("用户未登录", e);
         badRequestException.message("用户未登录");
+        return badRequestException.responseEntity();
+    }
+
+    @ExceptionHandler
+    ResponseEntity<?> notLoginExceptionHandler(NotRoleException e) {
+        if (isDebug) {
+            log.debug("用户未拥有 [{}] 角色", e.getRole());
+        }
+        BadRequestException badRequestException = new BadRequestException("用户无此角色", e);
+        badRequestException.message("拒绝操作");
         return badRequestException.responseEntity();
     }
 

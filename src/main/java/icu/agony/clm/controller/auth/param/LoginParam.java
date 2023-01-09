@@ -1,5 +1,6 @@
 package icu.agony.clm.controller.auth.param;
 
+import icu.agony.clm.consts.Role;
 import icu.agony.clm.verify.user.PasswordVerify;
 import icu.agony.clm.verify.user.UsernameVerify;
 import lombok.Getter;
@@ -21,6 +22,6 @@ public class LoginParam {
     @NotBlank
     private String password;
 
-    private Boolean isStore = false;
+    private String role = Role.CONSUMER_NAME;
 
 }

@@ -35,8 +35,15 @@ public class UserServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = "a12345678")
-    void generateEncryptPassword(String password) {
+    void encryptPassword(String password) {
         String text = SaSecureUtil.aesEncrypt(authProperties.getAesKey(), password);
+        log.debug("加密后的密码: {}", text);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "OFz0/h3izRHEfo7bi79sEw==")
+    void decryptPassword(String password) {
+        String text = SaSecureUtil.aesDecrypt(authProperties.getAesKey(), password);
         log.debug("加密后的密码: {}", text);
     }
 

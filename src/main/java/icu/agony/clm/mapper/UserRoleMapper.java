@@ -1,9 +1,17 @@
 package icu.agony.clm.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import icu.agony.clm.entity.UserRoleEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
-public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
+public interface UserRoleMapper {
+
+    void insert(@Param("userId") String userId, @Param("roleId") Integer roleId);
+
+    void delete(@Param("userId") String userId, @Param("roleId") Integer roleId);
+
+    List<String> select(@Param("userId") String userId);
+
 }

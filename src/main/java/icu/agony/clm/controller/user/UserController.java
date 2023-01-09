@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import icu.agony.clm.consts.Role;
 import icu.agony.clm.controller.user.param.UserCreateParam;
+import icu.agony.clm.controller.user.param.UserSelectParam;
 import icu.agony.clm.controller.user.param.UserUpdateParam;
 import icu.agony.clm.controller.user.vo.UserVO;
 import icu.agony.clm.service.UserService;
@@ -42,9 +43,15 @@ public class UserController {
     }
 
     @GetMapping("/select-by-id")
-    @SaCheckRole(Role.PROVIDER_NAME)
+    @SaCheckRole({Role.MANAGER_NAME, Role.PROVIDER_NAME})
     UserVO selectById(@RequestParam @NotBlank String id) {
         return modelMapper.map(userService.selectById(id), UserVO.class);
+    }
+
+    @GetMapping("/select-by-example")
+    @SaCheckRole({Role.MANAGER_NAME, Role.PROVIDER_NAME})
+    UserVO selectByExample(@RequestBody UserSelectParam param) {
+        return modelMapper.map(userService.selectByExample(param), UserVO.class);
     }
 
     @PostMapping("/create")
