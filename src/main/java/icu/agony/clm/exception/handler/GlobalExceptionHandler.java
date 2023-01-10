@@ -2,7 +2,6 @@ package icu.agony.clm.exception.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
-import cn.dev33.satoken.exception.NotSafeException;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.BasicClmException;
 import icu.agony.clm.exception.UnauthorizedException;
@@ -32,10 +31,10 @@ public class GlobalExceptionHandler {
         return e.responseEntity();
     }
 
-    @ExceptionHandler(NotLoginException.class)
-    ResponseEntity<?> notLoginExceptionHandler() {
+    @ExceptionHandler
+    ResponseEntity<?> notLoginExceptionHandler(NotLoginException e) {
         if (isDebug) {
-            log.debug("用户未登录");
+            e.printStackTrace();
         }
         UnauthorizedException unauthorizedException = new UnauthorizedException("用户未登录");
         unauthorizedException.message("无权访问");
@@ -45,20 +44,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     ResponseEntity<?> notRoleException(NotRoleException e) {
         if (isDebug) {
-            log.debug("用户未拥有 [{}] 角色", e.getRole());
+            log.debug("用户未拥有 [{}] 角色", e.getRole(), e);
         }
         BadRequestException badRequestException = new BadRequestException("用户无此角色");
         badRequestException.message("拒绝操作");
-        return badRequestException.responseEntity();
-    }
-
-    @ExceptionHandler
-    ResponseEntity<?> notSafeException(NotSafeException e) {
-        if (isDebug) {
-            log.debug("未通过 [{}] 二级验证", e.getService());
-        }
-        BadRequestException badRequestException = new BadRequestException("二级验证未通过");
-        badRequestException.message("未通过验证");
         return badRequestException.responseEntity();
     }
 
@@ -75,8 +64,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    ResponseEntity<?> httpMessageNotReadableException() {
+    @ExceptionHandler
+    ResponseEntity<?> httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        if (isDebug) {
+            e.printStackTrace();
+        }
         BadRequestException badRequestException = new BadRequestException("非法请求参数");
         badRequestException.message("非法参数");
         return badRequestException.responseEntity();

@@ -3,6 +3,7 @@ package icu.agony.clm.config;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import icu.agony.clm.config.properties.ClmAuthProperties;
+import icu.agony.clm.config.properties.ClmCaptchaProperties;
 import icu.agony.clm.config.properties.ClmDefaultProperties;
 import org.hibernate.validator.HibernateValidator;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.ResourceUtils;
 
@@ -22,14 +24,15 @@ import java.util.Properties;
 
 @SpringBootConfiguration
 @EnableCaching
+@EnableAspectJAutoProxy
 @EnableTransactionManagement
-@EnableConfigurationProperties({ClmAuthProperties.class, ClmDefaultProperties.class})
+@EnableConfigurationProperties({ClmAuthProperties.class, ClmDefaultProperties.class, ClmCaptchaProperties.class})
 public class ClmConfiguration {
 
     @Bean
     Validator validator() {
         return Validation.byProvider(HibernateValidator.class)
-                .configure()
+            .configure()
             .failFast(true)
             .buildValidatorFactory()
             .getValidator();

@@ -1,5 +1,6 @@
 package icu.agony.clm.service;
 
+import icu.agony.clm.consts.CaptchaType;
 import icu.agony.clm.controller.captcha.param.CaptchaGenerateParam;
 import icu.agony.clm.controller.captcha.param.CaptchaVerifyParam;
 import icu.agony.clm.controller.captcha.vo.CaptchaGenerateVO;
@@ -20,5 +21,12 @@ public interface CaptchaService {
      * @param param 请求参数
      */
     void verify(CaptchaVerifyParam param);
+
+    /**
+     * 使用验证码
+     *
+     * @param type 验证码类型
+     */
+    void use(CaptchaType type);
 
 }

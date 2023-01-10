@@ -1,8 +1,7 @@
 package icu.agony.clm.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import icu.agony.clm.config.properties.ClmDefaultProperties;
+import icu.agony.clm.config.properties.ClmCaptchaProperties;
 import icu.agony.clm.consts.CaptchaType;
 import icu.agony.clm.controller.captcha.param.CaptchaGenerateParam;
 import icu.agony.clm.controller.captcha.param.CaptchaVerifyParam;
@@ -10,8 +9,10 @@ import icu.agony.clm.controller.captcha.vo.CaptchaGenerateVO;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.InternalServerException;
 import icu.agony.clm.service.CaptchaService;
+import icu.agony.clm.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -29,9 +30,11 @@ import java.time.Duration;
 @Slf4j
 public class CaptchaServiceImpl implements CaptchaService {
 
+    private final boolean isDebug = log.isDebugEnabled();
+
     private final DefaultKaptcha kaptcha;
 
-    private final ClmDefaultProperties defaultProperties;
+    private final ClmCaptchaProperties captchaProperties;
 
     private final HttpSession session;
 
@@ -41,17 +44,20 @@ public class CaptchaServiceImpl implements CaptchaService {
     public CaptchaGenerateVO generate(CaptchaGenerateParam param) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
             // region 验证码生成
-            String captchaText = kaptcha.createText();
+            String captchaText = RandomUtil.makeString(captchaProperties.getLength());
             BufferedImage captchaImage = kaptcha.createImage(captchaText);
             ImageIO.write(captchaImage, "jpg", stream);
             String imageBase64 = Base64Utils.encodeToString(stream.toByteArray());
             stream.flush();
+            if (isDebug) {
+                log.debug("session: [{}], 验证码：[{}]", session.getId(), captchaText);
+            }
             // endregion
 
             // region 验证码写入redis
-            Duration duration = defaultProperties.getCaptchaDuration();
+            Duration duration = captchaProperties.getDuration();
             String redisKey = redisKey(param.getType());
-            redisTemplate.opsForValue().set(redisKey, captchaText, duration);
+            redisTemplate.opsForValue().set(redisKey, captchaText, duration.plusSeconds(15));
             // endregion
 
             // region 封装返回值
@@ -70,25 +76,54 @@ public class CaptchaServiceImpl implements CaptchaService {
     @Override
     public void verify(CaptchaVerifyParam param) {
         String redisKey = redisKey(param.getType());
-        Object captchaText = redisTemplate.opsForValue().get(redisKey);
-        // 验证码不存在
-        if (captchaText == null) {
+        Object captcha = redisTemplate.opsForValue().get(redisKey);
+        if (isDebug) {
+            log.debug("验证码校验 -> type：[{}]，captcha：[{}]，actual：[{}]", param.getType(), param.getValue(), captcha);
+        }
+
+        // region 验证码不存在
+        if (captcha == null) {
             BadRequestException badRequestException = new BadRequestException("验证码过期");
             badRequestException.message("验证码过期");
             throw badRequestException;
         }
-        // 验证码错误
-        if (!captchaText.equals(param.getValue())) {
+        // endregion
+
+        // region 验证码错误
+        String captchaText = ((String) captcha);
+        String captchaTemp = param.getValue();
+        boolean result = captchaProperties.getStrict() ? captchaText.equals(captchaTemp) : captchaText.equalsIgnoreCase(captchaTemp);
+        if (!result) {
             BadRequestException badRequestException = new BadRequestException("验证码错误");
             badRequestException.message("验证码错误");
             throw badRequestException;
         }
+        // endregion
+
+        // region 验证通过
         CaptchaType type = param.getType();
-        StpUtil.openSafe(type.getNickname(), type.getTimeout().toSeconds());
+        redisTemplate.delete(redisKey);
+        redisTemplate.opsForValue().set(useKey(type), DateTime.now().getMillis(), Duration.ofSeconds(60));
+        // endregion
+    }
+
+    @Override
+    public void use(CaptchaType type) {
+        String useKey = useKey(type);
+        if (redisTemplate.opsForValue().get(useKey) == null) {
+            BadRequestException badRequestException = new BadRequestException("未通过二级验证");
+            badRequestException.message("未通过验证");
+            throw badRequestException;
+        }
+        redisTemplate.delete(useKey);
     }
 
     private String redisKey(CaptchaType type) {
         return String.format("captcha:%s:%s", session.getId(), type);
+    }
+
+    private String useKey(CaptchaType type) {
+        return String.format("use:%s:%s", session.getId(), type);
     }
 
 }

@@ -1,7 +1,7 @@
 package icu.agony.clm.controller.auth;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.stp.StpUtil;
+import icu.agony.clm.annotation.CheckCaptcha;
 import icu.agony.clm.consts.CaptchaType;
 import icu.agony.clm.controller.auth.param.LoginParam;
 import icu.agony.clm.service.AuthService;
@@ -17,10 +17,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
+    @CheckCaptcha(CaptchaType.LOGIN)
     void login(@RequestBody @Validated LoginParam param) {
-        StpUtil.checkSafe(CaptchaType.LOGIN.getNickname());
         authService.login(param);
-        StpUtil.closeSafe(CaptchaType.LOGIN.getNickname());
     }
 
     @DeleteMapping("/logout")
