@@ -2,11 +2,13 @@ package icu.agony.clm.exception.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.exception.NotSafeException;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.BasicClmException;
 import icu.agony.clm.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -51,6 +53,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    ResponseEntity<?> notSafeException(NotSafeException e) {
+        if (isDebug) {
+            log.debug("未通过 [{}] 二级验证", e.getService());
+        }
+        BadRequestException badRequestException = new BadRequestException("二级验证未通过");
+        badRequestException.message("未通过验证");
+        return badRequestException.responseEntity();
+    }
+
+    @ExceptionHandler
     ResponseEntity<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         FieldError param = e.getFieldError();
         if (param != null) {
@@ -63,10 +75,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<?> httpMessageNotReadableException() {
+        BadRequestException badRequestException = new BadRequestException("非法请求参数");
+        badRequestException.message("非法参数");
+        return badRequestException.responseEntity();
+    }
+
     @ExceptionHandler
     ResponseEntity<?> unknownExceptionHandler(Exception e) {
         log.error("程序未知异常", e);
-        return ResponseEntity.internalServerError().body("{}");
+        return ResponseEntity.internalServerError().build();
     }
 
 }

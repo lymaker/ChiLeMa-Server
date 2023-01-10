@@ -22,6 +22,7 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <modelmapper.version>3.1.1</modelmapper.version>
         <tencent-cos.version>5.6.97</tencent-cos.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
 
     <dependencies>
@@ -74,6 +75,11 @@
             <groupId>com.qcloud</groupId>
             <artifactId>cos_api</artifactId>
             <version>${tencent-cos.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>${kaptcha.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
