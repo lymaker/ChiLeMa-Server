@@ -4,6 +4,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
 import icu.agony.clm.exception.BadRequestException;
 import icu.agony.clm.exception.BasicClmException;
+import icu.agony.clm.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -29,22 +30,22 @@ public class GlobalExceptionHandler {
         return e.responseEntity();
     }
 
-    @ExceptionHandler
-    ResponseEntity<?> notLoginExceptionHandler(NotLoginException e) {
+    @ExceptionHandler(NotLoginException.class)
+    ResponseEntity<?> notLoginExceptionHandler() {
         if (isDebug) {
             log.debug("用户未登录");
         }
-        BadRequestException badRequestException = new BadRequestException("用户未登录", e);
-        badRequestException.message("用户未登录");
-        return badRequestException.responseEntity();
+        UnauthorizedException unauthorizedException = new UnauthorizedException("用户未登录");
+        unauthorizedException.message("无权访问");
+        return unauthorizedException.responseEntity();
     }
 
     @ExceptionHandler
-    ResponseEntity<?> notLoginExceptionHandler(NotRoleException e) {
+    ResponseEntity<?> notRoleException(NotRoleException e) {
         if (isDebug) {
             log.debug("用户未拥有 [{}] 角色", e.getRole());
         }
-        BadRequestException badRequestException = new BadRequestException("用户无此角色", e);
+        BadRequestException badRequestException = new BadRequestException("用户无此角色");
         badRequestException.message("拒绝操作");
         return badRequestException.responseEntity();
     }

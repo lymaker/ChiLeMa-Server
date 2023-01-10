@@ -69,9 +69,9 @@ public class UserServiceImpl implements UserService {
             userEntity.setId(StpUtil.getLoginIdAsString());
             userMapper.updateById(userEntity);
         } catch (Exception e) {
-            BadRequestException badRequestException = new BadRequestException("更新用户信息失败", e);
-            badRequestException.message("更新信息失败");
-            throw badRequestException;
+            InternalServerException internalServerException = new InternalServerException("更新用户信息失败", e);
+            internalServerException.message("更新用户信息失败");
+            throw internalServerException;
         }
     }
 

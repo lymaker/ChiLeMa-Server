@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (BadRequestException e) {
             throw e;
         } catch (Exception e) {
-            throw new InternalServerException("服务器内部错误", e);
+            throw new InternalServerException("未知异常", e);
         }
     }
 

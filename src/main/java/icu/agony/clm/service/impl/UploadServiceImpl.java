@@ -8,7 +8,7 @@ import com.qcloud.cos.model.ObjectMetadata;
 import icu.agony.clm.config.properties.ClmTencentCosProperties;
 import icu.agony.clm.config.properties.ClmTencentProperties;
 import icu.agony.clm.controller.upload.param.UploadImageParam;
-import icu.agony.clm.exception.BadRequestException;
+import icu.agony.clm.exception.InternalServerException;
 import icu.agony.clm.service.UploadService;
 import icu.agony.clm.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +50,9 @@ public class UploadServiceImpl implements UploadService {
             json.putPOJO("url", imageUrl);
             return json.toString();
         } catch (IOException e) {
-            BadRequestException badRequestException = new BadRequestException("图片上传失败", e);
-            badRequestException.message("图片上传失败");
-            throw badRequestException;
+            InternalServerException internalServerException = new InternalServerException("图片上传失败", e);
+            internalServerException.message("图片上传失败");
+            throw internalServerException;
         }
     }
 

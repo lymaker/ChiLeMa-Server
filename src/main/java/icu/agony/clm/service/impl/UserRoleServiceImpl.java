@@ -1,6 +1,6 @@
 package icu.agony.clm.service.impl;
 
-import icu.agony.clm.exception.BadRequestException;
+import icu.agony.clm.exception.InternalServerException;
 import icu.agony.clm.mapper.UserRoleMapper;
 import icu.agony.clm.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         try {
             userRoleMapper.insert(userId, roleId);
         } catch (Exception e) {
-            throw new BadRequestException("创建用户角色失败", e);
+            throw new InternalServerException("创建用户角色失败", e);
         }
     }
 
@@ -43,7 +43,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         try {
             userRoleMapper.delete(userId, roleId);
         } catch (Exception e) {
-            throw new BadRequestException("删除用户角色失败", e);
+            throw new InternalServerException("删除用户角色失败", e);
         }
     }
 
