@@ -27,6 +27,7 @@ CREATE TABLE clm_user_role
 (
     user_id VARCHAR(50) NOT NULL COMMENT '用户id',
     role_id TINYINT     NOT NULL COMMENT '角色id',
+    UNIQUE INDEX `user_role_unique` (user_id, role_id),
     CONSTRAINT clm_user_role_clm_user_user_id FOREIGN KEY (user_id) REFERENCES clm_user (id),
     CONSTRAINT clm_user_role_clm_role_role_id FOREIGN KEY (role_id) REFERENCES clm_role (id)
 ) COMMENT '用户角色表';

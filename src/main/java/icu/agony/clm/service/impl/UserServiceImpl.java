@@ -25,7 +25,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -94,12 +93,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity selectByExample(UserSelectParam param) {
         return new LambdaQueryChainWrapper<>(userMapper)
-            .eq(StringUtils.hasText(param.getId()), UserEntity::getId, param.getId())
-            .eq(StringUtils.hasText(param.getNickname()), UserEntity::getNickname, param.getNickname())
-            .eq(StringUtils.hasText(param.getUsername()), UserEntity::getUsername, param.getUsername())
-            .eq(StringUtils.hasText(param.getPassword()), UserEntity::getPassword, param.getPassword())
-            .eq(StringUtils.hasText(param.getPhone()), UserEntity::getPhone, param.getPhone())
-            .eq(StringUtils.hasText(param.getEmail()), UserEntity::getEmail, param.getEmail())
+            .eq(Objects.nonNull(param.getId()), UserEntity::getId, param.getId())
+            .eq(Objects.nonNull(param.getNickname()), UserEntity::getNickname, param.getNickname())
+            .eq(Objects.nonNull(param.getUsername()), UserEntity::getUsername, param.getUsername())
+            .eq(Objects.nonNull(param.getPassword()), UserEntity::getPassword, param.getPassword())
+            .eq(Objects.nonNull(param.getPhone()), UserEntity::getPhone, param.getPhone())
+            .eq(Objects.nonNull(param.getEmail()), UserEntity::getEmail, param.getEmail())
             .eq(Objects.nonNull(param.getMoney()), UserEntity::getMoney, param.getMoney())
             .oneOpt()
             .orElseThrow(() -> {
