@@ -12,13 +12,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.ResourceUtils;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -46,9 +44,9 @@ public class ClmConfiguration {
     @Bean
     DefaultKaptcha kaptcha() throws IOException {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
-        File file = ResourceUtils.getFile("classpath:config/kaptcha.properties");
+        ClassPathResource file = new ClassPathResource("config/kaptcha.properties");
         Properties properties = new Properties();
-        properties.load(new FileInputStream(file));
+        properties.load(file.getInputStream());
         Config config = new Config(properties);
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;

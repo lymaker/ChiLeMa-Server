@@ -3,6 +3,8 @@ package icu.agony.clm.controller.user;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
+import icu.agony.clm.annotation.CheckCaptcha;
+import icu.agony.clm.consts.CaptchaType;
 import icu.agony.clm.consts.Role;
 import icu.agony.clm.controller.user.param.UserCreateParam;
 import icu.agony.clm.controller.user.param.UserSelectParam;
@@ -56,6 +58,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
+    @CheckCaptcha(CaptchaType.REGISTER)
     void create(@RequestBody @Validated UserCreateParam param) {
         userService.create(param);
     }

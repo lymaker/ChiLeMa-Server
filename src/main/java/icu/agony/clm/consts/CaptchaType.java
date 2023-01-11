@@ -12,7 +12,9 @@ import java.time.Duration;
 @AllArgsConstructor
 public enum CaptchaType {
 
-    LOGIN("login", Duration.ofSeconds(60));
+    LOGIN("login", Duration.ofSeconds(60)),
+
+    REGISTER("register", Duration.ofMinutes(5));
 
     private final String nickname;
 

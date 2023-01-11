@@ -111,7 +111,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     public void use(CaptchaType type) {
         String useKey = useKey(type);
         if (redisTemplate.opsForValue().get(useKey) == null) {
-            BadRequestException badRequestException = new BadRequestException("未通过二级验证");
+            BadRequestException badRequestException = new BadRequestException("未通过验证码");
             badRequestException.message("未通过验证");
             throw badRequestException;
         }
