@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.Positive;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
@@ -20,6 +21,7 @@ public class ClmCaptchaProperties {
     /**
      * 验证码位数
      */
+    @Positive
     private Integer length = 4;
 
     /**

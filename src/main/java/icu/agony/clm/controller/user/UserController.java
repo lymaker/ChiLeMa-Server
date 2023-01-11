@@ -29,6 +29,7 @@ public class UserController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/check-username")
+    @Validated
     void checkUsername(@RequestParam @UsernameVerify String username) {
         userService.checkUsername(username);
     }
@@ -47,13 +48,14 @@ public class UserController {
 
     @GetMapping("/select-by-id")
     @SaCheckRole(value = {Role.MANAGER_NAME, Role.PROVIDER_NAME}, mode = SaMode.OR)
+    @Validated
     UserVO selectById(@RequestParam @NotBlank String id) {
         return modelMapper.map(userService.selectById(id), UserVO.class);
     }
 
     @GetMapping("/select-by-example")
     @SaCheckRole(value = {Role.MANAGER_NAME, Role.PROVIDER_NAME}, mode = SaMode.OR)
-    UserVO selectByExample(@RequestBody UserSelectParam param) {
+    UserVO selectByExample(@RequestBody @Validated UserSelectParam param) {
         return modelMapper.map(userService.selectByExample(param), UserVO.class);
     }
 

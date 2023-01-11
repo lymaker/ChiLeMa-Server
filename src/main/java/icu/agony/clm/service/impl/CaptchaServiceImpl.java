@@ -112,7 +112,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         String useKey = useKey(type);
         if (redisTemplate.opsForValue().get(useKey) == null) {
             BadRequestException badRequestException = new BadRequestException("未通过验证码");
-            badRequestException.message("未通过验证");
+            badRequestException.message("请输入验证码");
             throw badRequestException;
         }
         redisTemplate.delete(useKey);

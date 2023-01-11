@@ -7,6 +7,7 @@ import icu.agony.clm.controller.role.param.UserRoleCreateParam;
 import icu.agony.clm.controller.role.param.UserRoleDeleteParam;
 import icu.agony.clm.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,12 @@ public class UserRoleController {
     private final UserRoleService userRoleService;
 
     @PostMapping("/create")
-    void create(@RequestBody UserRoleCreateParam param) {
+    void create(@RequestBody @Validated UserRoleCreateParam param) {
         userRoleService.create(param.getUserId(), param.getRoleId());
     }
 
     @DeleteMapping("/delete")
-    void delete(@RequestBody UserRoleDeleteParam param) {
+    void delete(@RequestBody @Validated UserRoleDeleteParam param) {
         userRoleService.delete(param.getUserId(), param.getRoleId());
     }
 

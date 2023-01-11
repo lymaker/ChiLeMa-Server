@@ -209,6 +209,8 @@ CREATE TABLE clm_comment_image
 
 -- 数据
 INSERT INTO clm_role
-VALUES (1, 'consumer');
+VALUES (1, 'manager');
 INSERT INTO clm_role
-VALUES (2, 'provider');
+VALUES (2, 'consumer');
+INSERT INTO clm_role
+VALUES (3, 'provider');
