@@ -61,6 +61,7 @@ CREATE TABLE clm_store
     cover_image_url      VARCHAR(255) NOT NULL COMMENT '店铺封面',
     background_image_url VARCHAR(255) NOT NULL COMMENT '背景图片',
     description          TEXT         NOT NULL COMMENT '店铺描述',
+    minimum_consume      DOUBLE DEFAULT 0 COMMENT '最低消费',
     latitude             FLOAT        NOT NULL COMMENT '经度',
     longitude            FLOAT        NOT NULL COMMENT '纬度',
     open_time            TIMESTAMP    NOT NULL COMMENT '开始营业时间',
@@ -206,11 +207,3 @@ CREATE TABLE clm_comment_image
     image_url  VARCHAR(200) NOT NULL COMMENT '图片url',
     CONSTRAINT clm_comment_image_clm_comment_comment_id FOREIGN KEY (comment_id) REFERENCES clm_comment (id)
 ) COMMENT '评论图片表';
-
--- 数据
-INSERT INTO clm_role
-VALUES (1, 'manager');
-INSERT INTO clm_role
-VALUES (2, 'consumer');
-INSERT INTO clm_role
-VALUES (3, 'provider');
